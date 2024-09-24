@@ -2,7 +2,7 @@ import { Cart, Collection, Product } from "lib/types";
 import { reshapeCart, reshapeProduct, reshapeProducts } from "./reshape";
 import { FourthwallCart, FourthwallCheckout, FourthwallCollection, FourthwallProduct } from "./types";
 
-const API_URL = process.env.NEXT_PUBLIC_FW_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_FW_API_URL || 'https://api.fourthwall.com';
 const STOREFRONT_TOKEN = process.env.NEXT_PUBLIC_FW_STOREFRONT_TOKEN;
 
 /**

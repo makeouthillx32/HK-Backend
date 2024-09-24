@@ -2,7 +2,7 @@
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FFourthwallHQ%2Fvercel-commerce)
 
-A high-perfomance, server-rendered Next.js App Router ecommerce application.
+Launch your Fourthwall storefront as a high-perfomance, server-rendered Next.js App Router ecommerce application.
 
 ⚡️ [Live Demo](https://fw-commerce.vercel.app)
 
@@ -23,12 +23,13 @@ There are a few prerequisites to get started with Fourthwall's Storefront API.
 5. Fill out the environment variables below in .env.local.
 
 ```bash
-NEXT_PUBLIC_FW_API_URL="https://api.fourthwall.com"
 NEXT_PUBLIC_FW_STOREFRONT_TOKEN="<your storefront token>" # Example: ptkn_...
+
 NEXT_PUBLIC_FW_CHECKOUT="<your store url>" # Example: vercel-shop.fourthwall.com. Used for checkout
 NEXT_PUBLIC_VERCEL_URL="<the url of your vercel site>" # Example: fw-commerce.vercel.app. This is used for sitemap.xml + robots.txt.
 
-NEXT_PUBLIC_FW_COLLECTION="<the handle of your collection>" # (Optional) This is available at the details page for the collection. See Resources for more details.
+# Optional
+NEXT_PUBLIC_FW_COLLECTION="<the handle of your collection>" # If you want to display a specific collection. See Resources for more details on how to get the collection handle.
 ```
 
 ## Develop locally
@@ -52,7 +53,6 @@ Your app should now be running on [localhost:3000](http://localhost:3000/).
 
 ```bash
 vercel # Initializes the project
-vercel env add NEXT_PUBLIC_FW_API_URL # Will prompt you for the value
 vercel env add NEXT_PUBLIC_FW_COLLECTION
 vercel env add NEXT_PUBLIC_FW_STOREFRONT_TOKEN
 vercel env add NEXT_PUBLIC_FW_CHECKOUT
