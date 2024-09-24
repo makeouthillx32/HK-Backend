@@ -4,6 +4,8 @@
 
 A high-perfomance, server-rendered Next.js App Router ecommerce application.
 
+[⚡️ Live Demo](https://fw-commerce.vercel.app)
+
 ## Getting started
 
 There are a few prerequisites to get started with Fourthwall's Storefront API.
