@@ -1,4 +1,4 @@
-import { getCollectionProducts, getCollections } from 'lib/fourthwall';
+import { getCollectionProducts } from 'lib/fourthwall';
 import { validateEnvironmentVariables } from 'lib/utils';
 import { MetadataRoute } from 'next';
 
@@ -21,21 +21,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date().toISOString()
   }));
 
-  const collections = await getCollections();
-
-  const productsPromises = collections.map((collection) => {
-    return getCollectionProducts({ collection: collection.handle, currency: 'USD' }).then((products) =>
-      products.map((product) => ({
-        url: `${baseUrl}/product/${product.handle}`,
-        lastModified: product.updatedAt
-      }))
-    );
-  });
+  const productsPromise = getCollectionProducts({ collection: 'all', currency: 'USD', limit: 100 }).then((products) =>
+    products.map((product) => ({
+      url: `${baseUrl}/product/${product.handle}`,
+      lastModified: product.updatedAt
+    }))
+  );
   
   let fetchedRoutes: Route[] = [];
 
   try {
-    fetchedRoutes = (await Promise.all([...productsPromises])).flat();
+    fetchedRoutes = await productsPromise;
   } catch (error) {
     throw JSON.stringify(error, null, 2);
   }
