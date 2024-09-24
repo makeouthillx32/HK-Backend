@@ -18,7 +18,7 @@ export function WelcomeToast() {
           <>
             This is a high-performance, SSR storefront powered by Fourthwall, Next.js, and Vercel.{' '}
             <a
-              href="https://vercel.com/templates/next.js/nextjs-commerce"
+              href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FFourthwallHQ%2Fvercel-commerce"
               className="text-blue-600 hover:underline"
               target="_blank"
             >

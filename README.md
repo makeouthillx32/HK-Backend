@@ -1,16 +1,16 @@
 # Next.js x Fourthwall
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fcommerce&project-name=commerce&repo-name=commerce&demo-title=Next.js%20Commerce&demo-url=https%3A%2F%2Fdemo.vercel.store&demo-image=https%3A%2F%2Fbigcommerce-demo-asset-ksvtgfvnd.vercel.app%2Fbigcommerce.png&env=COMPANY_NAME,SHOPIFY_REVALIDATION_SECRET,SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_ACCESS_TOKEN,SITE_NAME,TWITTER_CREATOR,TWITTER_SITE)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FFourthwallHQ%2Fvercel-commerce)
 
 A high-perfomance, server-rendered Next.js App Router ecommerce application.
 
-## Create a store, get a storefront token
+## Getting started
 
-A storefront token is a public access token that allows you to pull product data from your Fourthwall store. To get a storefront token:
+There are a few prerequisites to get started with Fourthwall's Storefront API.
 
 1. [Set up a store](https://fourthwall.com/get-started) on Fourthwall.
 
-2. [Make some products](https://my-shop.fourthwall.com/admin/dashboard/products/all/) and [set up a collection](https://my-shop.fourthwall.com/admin/dashboard/products/collections/).
+2. [Make some products](https://my-shop.fourthwall.com/admin/dashboard/products/all/) and [create a collection](https://my-shop.fourthwall.com/admin/dashboard/products/collections/).
 
 3. (optional) [Style your store](https://my-shop.fourthwall.com/admin/dashboard/store-design/layout/index/) for the [checkout flow](https://docs.fourthwall.com/storefront/checkout).
 
