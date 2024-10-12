@@ -17,6 +17,7 @@ async function fourthwallGet<T>(url: string, query: Record<string, string | numb
     }
   });
   constructedUrl.searchParams.append('storefront_token', STOREFRONT_TOKEN);
+
   try {
     const result = await fetch(
       constructedUrl.toString(),
@@ -75,7 +76,7 @@ async function fourthwallPost<T>(url: string, data: any, options: RequestInit = 
  * Collection operations
  */
 export async function getCollections(): Promise<Collection[]> {
-  const res = await fourthwallGet<{ results: FourthwallCollection[] }>(`${API_URL}/api/public/v1.0/collections`, {});
+  const res = await fourthwallGet<{ results: FourthwallCollection[] }>(`${API_URL}/v1/collections`, {});
 
   return res.body.results.map((collection) => ({
     handle: collection.slug,
@@ -97,6 +98,8 @@ export async function getCollectionProducts({
     currency,
     limit
   });
+
+  console.warn(res.body);
 
   if (!res.body.results) {
     console.warn(`No collection found for \`${collection}\``);

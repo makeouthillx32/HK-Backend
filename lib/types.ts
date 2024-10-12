@@ -82,8 +82,8 @@ export type ProductVariant = {
   title: string;
   availableForSale: boolean;
   selectedOptions: {
-    name: string;
-    value: string;
+    name?: string;
+    value?: string;
   }[];
   price: Money;
   images: Image[];
