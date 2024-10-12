@@ -27,6 +27,7 @@ export const reshapeProducts = (products: FourthwallProduct[]) => {
 
   for (const product of products) {
     if (product) {
+      console.warn(JSON.stringify(product));
       const reshapedProduct = reshapeProduct(product);
 
       if (reshapedProduct) {
@@ -49,9 +50,10 @@ export const reshapeProduct = (product: FourthwallProduct): Product | undefined 
   const maxPrice = Math.max(...variants.map((v) => v.unitPrice.value));
 
   const currencyCode = variants[0]?.unitPrice.currency || 'USD';
+  const attributes = variants.map((v) => (v.attributes))
 
-  const sizes = new Set(variants.map((v) => v.attributes.size.name));
-  const colors = new Set(variants.map((v) => v.attributes.color.name));
+  const sizes = new Set(attributes.filter((a) => !!a.size).map((v) => v.size?.name));
+  const colors = new Set(attributes.filter((a) => !!a.color).map((v) => v.color?.name));
 
   const reshapedVariants = reshapeVariants(variants);
 
@@ -77,11 +79,11 @@ export const reshapeProduct = (product: FourthwallProduct): Product | undefined 
     options: [{
       id: 'color',
       name: 'Color',
-      values: [...colors]
+      values: [...colors].filter((c) => !!c) as string[]
     }, {
       id: 'size',
       name: 'Size',
-      values: [...sizes]
+      values: [...sizes].filter((s) => !!s) as string[]
     }],    
     availableForSale: reshapedVariants.some((v) => v.availableForSale),
     tags: [],
@@ -107,10 +109,10 @@ const reshapeVariants = (variants: FourthwallProductVariant[]): ProductVariant[]
     images: reshapeImages(v.images, v.name),
     selectedOptions: [{
       name: 'Size',
-      value: v.attributes.size.name
+      value: v.attributes.size?.name
     }, {
       name: 'Color',
-      value: v.attributes.color.name
+      value: v.attributes.color?.name
     }],
     price: reshapeMoney(v.unitPrice),
   }))
@@ -124,7 +126,10 @@ const reshapeCartItem = (item: FourthwallCartItem): CartItem => {
     id: item.variant.id,
     quantity: item.quantity,
     cost: {
-      totalAmount: reshapeMoney(item.variant.unitPrice)
+      totalAmount: reshapeMoney({
+        value: (item.variant.unitPrice.value * item.quantity),
+        currency: item.variant.unitPrice.currency
+      })
     },
     merchandise: {
       id: item.variant.id,
@@ -133,12 +138,12 @@ const reshapeCartItem = (item: FourthwallCartItem): CartItem => {
       selectedOptions: [],
       product: {
         // TODO: need this product info in model
-        id: 'TT', 
-        handle: 'TT',
-        title: 'TT',
+        id: item.variant.product?.id || 'TT', 
+        handle: item.variant.product?.slug || 'TT',
+        title: item.variant.product?.name || 'TT',
         featuredImage: {
           url: item.variant.images[0]?.url || 'TT',
-          altText: 'TT',
+          altText: item.variant.product?.name || 'TT',
           width: item.variant.images[0]?.width || 100,
           height: item.variant.images[0]?.height || 100
         }
@@ -165,8 +170,6 @@ export const reshapeCart = (cart: FourthwallCart): Cart => {
     },
     lines: cart.items.map(reshapeCartItem),
     currency: currencyCode,
-    // TODO: Stubbed out
-    checkoutUrl: 'TT', 
     totalQuantity: cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0)
   };
 };

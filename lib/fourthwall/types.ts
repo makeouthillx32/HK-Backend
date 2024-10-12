@@ -46,13 +46,19 @@ export type FourthwallProductVariant = {
   // other attr
   attributes: {
     description: string;
-    color: {
+    color?: {
       name: string;
       swatch: string;
     },
-    size: {
+    size?: {
       name: string;
     };
+  }
+
+  product?: {
+    id: string;
+    slug: string;
+    name: string;
   }
 };
 
