@@ -1,6 +1,5 @@
 export type Cart = {
   id: string | undefined;
-  checkoutUrl: string;
   cost: {
     subtotalAmount: Money;
     totalAmount: Money;
@@ -82,7 +81,7 @@ export type ProductVariant = {
   title: string;
   availableForSale: boolean;
   selectedOptions: {
-    name?: string;
+    name: string;
     value?: string;
   }[];
   price: Money;

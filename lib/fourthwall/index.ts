@@ -1,9 +1,17 @@
 import { Cart, Collection, Product } from "lib/types";
+import { Agent, setGlobalDispatcher } from 'undici';
 import { reshapeCart, reshapeProduct, reshapeProducts } from "./reshape";
 import { FourthwallCart, FourthwallCollection, FourthwallProduct } from "./types";
 
-const API_URL = process.env.NEXT_PUBLIC_FW_API_URL || 'https://storefront-api.fourthwall.com';
+const API_URL = process.env.NEXT_PUBLIC_FW_API_URL || 'https://storefront-api.fourthwall.com/v1';
 const STOREFRONT_TOKEN = process.env.NEXT_PUBLIC_FW_STOREFRONT_TOKEN || '';
+
+const agent = new Agent({
+  connect: {
+    rejectUnauthorized: false
+  }
+});
+setGlobalDispatcher(agent);
 
 /**
  * Helpers
@@ -27,10 +35,9 @@ async function fourthwallGet<T>(url: string, query: Record<string, string | numb
         headers: {
           'Content-Type': 'application/json',
           ...options.headers
-        }
+        },
       }
     );
-
     const body = await result.json();
 
     return {
@@ -76,7 +83,7 @@ async function fourthwallPost<T>(url: string, data: any, options: RequestInit = 
  * Collection operations
  */
 export async function getCollections(): Promise<Collection[]> {
-  const res = await fourthwallGet<{ results: FourthwallCollection[] }>(`${API_URL}/v1/collections`, {});
+  const res = await fourthwallGet<{ results: FourthwallCollection[] }>(`${API_URL}/collections`, {});
 
   return res.body.results.map((collection) => ({
     handle: collection.slug,
@@ -94,12 +101,10 @@ export async function getCollectionProducts({
   currency: string;
   limit?: number;
 }): Promise<Product[]> {
-  const res = await fourthwallGet<{results: FourthwallProduct[]}>(`${API_URL}/v1/collections/${collection}/products`, {
+  const res = await fourthwallGet<{results: FourthwallProduct[]}>(`${API_URL}/collections/${collection}/products`, {
     currency,
     limit
   });
-
-  console.warn(res.body);
 
   if (!res.body.results) {
     console.warn(`No collection found for \`${collection}\``);
@@ -114,7 +119,7 @@ export async function getCollectionProducts({
  * Product operations
  */
 export async function getProduct({ handle, currency } : { handle: string, currency: string }): Promise<Product | undefined> {
-  const res = await fourthwallGet<FourthwallProduct>(`${API_URL}/v1/products/${handle}`, { currency });
+  const res = await fourthwallGet<FourthwallProduct>(`${API_URL}/products/${handle}`, { currency });
 
   return reshapeProduct(res.body);
 }
@@ -127,7 +132,7 @@ export async function getCart(cartId: string | undefined, currency: string): Pro
     return undefined;
   }
 
-  const res = await fourthwallGet<FourthwallCart>(`${API_URL}/v1/carts/${cartId}`, {
+  const res = await fourthwallGet<FourthwallCart>(`${API_URL}/carts/${cartId}`, {
     currency
   }, {
     cache: 'no-store'
@@ -137,7 +142,7 @@ export async function getCart(cartId: string | undefined, currency: string): Pro
 }
 
 export async function createCart(): Promise<Cart> {
-  const res = await fourthwallPost<FourthwallCart>(`${API_URL}/v1/carts`, {
+  const res = await fourthwallPost<FourthwallCart>(`${API_URL}/carts`, {
     items: []
   });
 
@@ -154,7 +159,7 @@ export async function addToCart(
     quantity: line.quantity
   }));
 
-  const res = await fourthwallPost<FourthwallCart>(`${API_URL}/v1/carts/${cartId}/add`, {
+  const res = await fourthwallPost<FourthwallCart>(`${API_URL}/carts/${cartId}/add`, {
     items,
   }, {
     cache: 'no-store'    
@@ -168,7 +173,7 @@ export async function removeFromCart(cartId: string, lineIds: string[]): Promise
     variantId: id
   }));
 
-  const res = await fourthwallPost<FourthwallCart>(`${API_URL}/v1/carts/${cartId}/remove`, {
+  const res = await fourthwallPost<FourthwallCart>(`${API_URL}/carts/${cartId}/remove`, {
     items,
   }, {
     cache: 'no-store'
@@ -186,7 +191,7 @@ export async function updateCart(
     quantity: line.quantity
   }));
 
-  const res = await fourthwallPost<FourthwallCart>(`${API_URL}/v1/carts/${cartId}/change`, {
+  const res = await fourthwallPost<FourthwallCart>(`${API_URL}/carts/${cartId}/change`, {
     items,
   }, {
     cache: 'no-store'

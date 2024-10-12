@@ -54,6 +54,12 @@ export type FourthwallProductVariant = {
       name: string;
     };
   }
+
+  product?: {
+    id: string;
+    slug: string;
+    name: string;
+  }
 };
 
 export type FourthwallCart = {
