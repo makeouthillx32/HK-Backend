@@ -27,6 +27,7 @@ export const reshapeProducts = (products: FourthwallProduct[]) => {
 
   for (const product of products) {
     if (product) {
+      console.warn(JSON.stringify(product));
       const reshapedProduct = reshapeProduct(product);
 
       if (reshapedProduct) {
@@ -49,9 +50,10 @@ export const reshapeProduct = (product: FourthwallProduct): Product | undefined 
   const maxPrice = Math.max(...variants.map((v) => v.unitPrice.value));
 
   const currencyCode = variants[0]?.unitPrice.currency || 'USD';
+  const attributes = variants.map((v) => (v.attributes))
 
-  const sizes = new Set(variants.map((v) => v.attributes.size.name));
-  const colors = new Set(variants.map((v) => v.attributes.color.name));
+  const sizes = new Set(attributes.filter((a) => !!a.size).map((v) => v.size?.name));
+  const colors = new Set(attributes.filter((a) => !!a.color).map((v) => v.color?.name));
 
   const reshapedVariants = reshapeVariants(variants);
 
@@ -107,10 +109,10 @@ const reshapeVariants = (variants: FourthwallProductVariant[]): ProductVariant[]
     images: reshapeImages(v.images, v.name),
     selectedOptions: [{
       name: 'Size',
-      value: v.attributes.size.name
+      value: v.attributes.size?.name
     }, {
       name: 'Color',
-      value: v.attributes.color.name
+      value: v.attributes.color?.name
     }],
     price: reshapeMoney(v.unitPrice),
   }))
